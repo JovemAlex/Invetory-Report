@@ -2,7 +2,7 @@ from inventory_report.reports.simple_report import SimpleReport
 from inventory_report.reports.complete_report import CompleteReport
 import csv
 import json
-import xml.etree.ElementTree as ET
+import xmltodict
 
 
 class Inventory:
@@ -17,9 +17,9 @@ class Inventory:
             return json.load(file)
 
         if ext == "xml":
-            tree = ET.parse(path)
-            root = tree.getroot()
-            return root
+            with open(path) as xmlfile:
+                data = xmltodict.parse(xmlfile.read())
+                return data["dataset"]["record"]
 
     @staticmethod
     def import_data(path: str, type: str):
